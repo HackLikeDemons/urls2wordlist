@@ -10,6 +10,9 @@ First draft: 2021-11-11
 
 import urllib.parse
 import argparse
+import re
+
+ip_pattern = re.compile('(?:[0-9]{1,3}){1,3}')
 
 parser = argparse.ArgumentParser()
 parser.add_argument('input_file', help='a file with URLs line by line as input')
@@ -43,10 +46,10 @@ for url in urls:
     
 with open('output_url_parts.txt', 'w') as output_file:
     for hostname_part in list(set(url_parts_collection)):
-        if len(hostname_part) > 0 and '.' not in hostname_part: 
+        if len(hostname_part) > 0 and '.' not in hostname_part and not re.search(ip_pattern, hostname_part): 
             output_file.write(hostname_part + '\n')
     
 with open('output_url_parameters.txt', 'w') as output_file:
     for url_params_part in list(set(url_params_parts_collection)):        
-        if len(url_params_part) > 0: 
+        if len(url_params_part) > 0 and '.' not in url_params_part: 
             output_file.write(url_params_part + '\n')
